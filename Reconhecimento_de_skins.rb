@@ -22,8 +22,7 @@ while 1 == 1
         #Finaliza o programa
         puts "====----------------------------------------------------===="
         puts "=-= Pretendo melhorar, mas muito obrigado por utilizar!! =-="
-        puts "====----------------------------------------------------===="
-        puts ""
+        puts "====----------------------------------------------------====\n"
         break
 
     elsif opc == 2
@@ -41,9 +40,9 @@ while 1 == 1
         puts "|   5550         |   149,90       |"
         puts "|   11500        |   299,90       |"
         puts "|                                 |"
-        puts "|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=|"
+        puts "|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=|\n"
         puts ""
-        puts ""
+        
     elsif opc == 1 
         #Recebe o nome da skin e faz o processo de comparação e devolução do custo
         puts "|-------------------------------------------------------------------|"
@@ -149,8 +148,7 @@ while 1 == 1
         #Entrada de numero invalido
         puts "====----------------------------------------------===="
         puts "=-= Opção não encontrada por favor tente novamente =-="
-        puts "====----------------------------------------------===="
-        puts ""
+        puts "====----------------------------------------------====\n"
     end
 
 end
