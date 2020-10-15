@@ -3,15 +3,25 @@ require 'nokogiri'
 require 'net/http'
 require 'titleize'
 
+Skins = [
+    "|    1 -=- Elderflame Frenzy",
+    "|    2 -=- Aristocrat Vandal",
+    "|    3 -=- Reaver Operator",
+    "|    4 -=- Sakura Classic" ,
+    "|    5 -=- Convex Bulldog",
+    "|    6 -=- Nebula Knife", 
+    "|    7 -=- Oni Phantom"
+]
 
 while 1 == 1
     #Inicia o programa
     puts ""
-    puts "|========================================|"
-    puts "||=-=Reconhecimento de Skins Valorant=-=||"
+    puts "|{-=-=-=-=-=-=-=]}=-={[=-=-=-=-==-=-=-=-}|"
+    puts "Reconhecimento de Skins Valorant".center(42, '|=-=|')
     puts "|                                        |"
     puts "|   01-[Descobrir o preço da skin]       |"
     puts "|   02-[Visualisar tabela de custo]      |"
+    puts "|   03-[Visualirar tabela de skins]      |"
     puts "|   00-[Finalizar programa]              |"        
     puts "|                                        |"
     print "- O que gostaria de se fazer: "
@@ -20,17 +30,17 @@ while 1 == 1
     
     if opc == 0
         #Finaliza o programa
-        puts "====----------------------------------------------------===="
+        puts "==}--{==".center(60,'==-')
         puts "=-= Pretendo melhorar, mas muito obrigado por utilizar!! =-="
-        puts "====----------------------------------------------------====\n"
+        puts "==}--{==".center(60,'==-')
         break
 
     elsif opc == 2
         #Informa uma tabela de preços 
         puts ""
-        puts "|=-=-=-=-=-=-=-=-=-=-==-=-==-=-=-=|"
+        puts "|{-=-=-=-=-=-=}]=-=[{=-=-=-=-=-=-}|"
         puts "||   =-=  Tabela de custo  =-=   ||"
-        puts "|     =-= Valorant Points =-=     |"
+        puts "|   =-=   Valorant Points   =-=   |"
         puts "| Quantidade VP  |  Preço em R$   |"
         puts "|                |                |"
         puts "|   500          |   14,90        |"
@@ -40,16 +50,29 @@ while 1 == 1
         puts "|   5550         |   149,90       |"
         puts "|   11500        |   299,90       |"
         puts "|                                 |"
-        puts "|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=|\n"
+        puts "|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=|"
         puts ""
-        
+
+    elsif opc == 3
+        #Informa uma tabela com as skins que podem ser selecionadas
+        puts ""
+        puts "|{-=-=-=-=-=-=}]=-=[{=-=-=-=-=-=-}|"
+        puts "|    Codigo     |    Nome_Skin    |"
+        puts ""
+        Skins.each {|x| puts x } #Percorre a lista de "Skins" e informa na tela o que contem dentro da lista
+        puts "|                                 |"
+        puts "|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=|"
+        puts ""
+
     elsif opc == 1 
         #Recebe o nome da skin e faz o processo de comparação e devolução do custo
         puts "|-------------------------------------------------------------------|"
-        puts "||Verifique o arquivo txt para saber alguns exemplos de opções||\n"
-        print'||Insira o nome da Skin desejada: '
-        skin_name = gets.chomp
-        skin_name = skin_name.titleize #Modificando para cada primeira letra da palavra ficar Maiuscula
+        print"||Insira o código da skin desejada: "
+        skin_cdg = gets.chomp.to_i
+        skin_cdg = skin_cdg - 1
+        skin_name = Skins[skin_cdg]
+        skin_name_real = skin_name[11,50] #Pega a string dentro do array depois da casa 11 e antes da casa 50
+        skin_name_real = skin_name_real.titleize #Modificando para cada primeira letra da palavra ficar Maiuscula
         preco_skin = 0
         puts ""
         https = Net::HTTP.new('valorant.fandom.com', 443) #Site sobre Valorant
@@ -63,9 +86,10 @@ while 1 == 1
         doc.css('table.wikitable tr').each do |tr_backup| #Percorre todas as <table>
             if ! (tr_backup.css('img').length == 0) #Verifica se há uma <img> dentro da <table>
                 skin_site = tr_backup.css('img').first['alt']
-                if (skin_site.include? (skin_name)) #Verifica se o nome incluido é igual ao nome da skin pego no <alt> da <img>
+                if (skin_site.include? (skin_name_real)) #Verifica se o nome incluido é igual ao nome da skin pego no <alt> da <img>
                     preco_skin = tr_backup.css('td').last.css('span').text.delete(',').to_i #Pega o valor da skin em <text> e transforma em Int
-                    puts "O preço da skin é #{preco_skin} VP \n"
+                    puts "Skin: #{skin_name_real}"
+                    puts "O preço: #{preco_skin} VP"
                     #Começa a comparação dos preços e declaração de custo
                     if(preco_skin == 875)
                         puts "---------------------------------------"
@@ -136,9 +160,9 @@ while 1 == 1
                         puts "É o equivalente a 11500 Valorant Points;"
                         puts "----------------------------------------"
                     else
-                        puts "====------------------------------------===="
+                        puts "==}--{==".center(44,'=-=')
                         puts "=-= Valor não encontrado tente novamente =-="
-                        puts "====------------------------------------===="
+                        puts "==}--{==".center(44,'=-=')
                     end
                     puts ""
                 end
@@ -146,9 +170,9 @@ while 1 == 1
         end
     else
         #Entrada de numero invalido
-        puts "====----------------------------------------------===="
+        puts "==}--{==".center(54,'=-=-')
         puts "=-= Opção não encontrada por favor tente novamente =-="
-        puts "====----------------------------------------------====\n"
+        puts "==}--{==".center(54,'=-=-')
     end
 
 end
