@@ -88,34 +88,37 @@ while 1 == 1
         puts "|-------------------------------------------------------------------|"
         print"||Insira o código da skin desejada: "
         skin_cdg = gets.chomp.to_i
-        skin_cdg = skin_cdg - 1
-        skin_name = Skins[skin_cdg].titleize #Modificando para cada primeira letra da palavra ficar Maiuscula
-        preco_skin = 0
         puts ""
-        https = Net::HTTP.new('valorant.fandom.com', 443) #Site sobre Valorant
-        https.use_ssl = true
-
-        response = https.get("/wiki/Weapon_Skins") #Tag para a aba de skins do jogo
-
-        doc = Nokogiri::HTML(response.body)
-
-
-        doc.css('table.wikitable tr').each do |tr_backup| #Percorre todas as <table>
-            if ! (tr_backup.css('img').length == 0) #Verifica se há uma <img> dentro da <table>
-                skin_site = tr_backup.css('img').first['alt']
-                if (skin_site.include? (skin_name)) #Verifica se o nome incluido é igual ao nome da skin pego no <alt> da <img>
-                    preco_skin = tr_backup.css('td').last.css('span').text.delete(',').to_i #Pega o valor da skin em <text> e transforma em Int
-                    puts "Skin: #{skin_name}"
-                    puts "O preço: #{preco_skin} VP"
-                    #Começa a comparação dos preços e declaração de custo
-                    if(valores.key?(preco_skin))
-                        puts valores[preco_skin]
-                    else
-                        puts "==}--{==".center(44,'=-=')
-                        puts "=-= Valor não encontrado tente novamente =-="
-                        puts "==}--{==".center(44,'=-=')
+        if (skin_cdg > Skins.length.to_i)
+            puts "==}--{==".center(56,'=-=-')
+            puts "= Slot de skin não existente por favor tente novamente ="
+            puts "==}--{==".center(56,'=-=-')
+        
+        else (skin_cdg <= Skins.length.to_i)
+            skin_cdg = skin_cdg - 1
+            skin_name = Skins[skin_cdg].titleize #Modificando para cada primeira letra da palavra ficar Maiuscula
+            preco_skin = 0
+            https = Net::HTTP.new('valorant.fandom.com', 443) #Site sobre Valorant
+            https.use_ssl = true
+            response = https.get("/wiki/Weapon_Skins") #Tag para a aba de skins do jogo
+            doc = Nokogiri::HTML(response.body)
+            doc.css('table.wikitable tr').each do |tr_backup| #Percorre todas as <table>
+                if ! (tr_backup.css('img').length == 0) #Verifica se há uma <img> dentro da <table>
+                    skin_site = tr_backup.css('img').first['alt']
+                    if (skin_site.include? (skin_name)) #Verifica se o nome incluido é igual ao nome da skin pego no <alt> da <img>
+                        preco_skin = tr_backup.css('td').last.css('span').text.delete(',').to_i #Pega o valor da skin em <text> e transforma em Int
+                        puts "Skin: #{skin_name}"
+                        puts "O preço: #{preco_skin} VP"
+                        #Começa a comparação dos preços e declaração de custo
+                        if(valores.key?(preco_skin))
+                            puts valores[preco_skin]
+                        else
+                            puts "==}--{==".center(44,'=-=')
+                            puts "=-= Valor não encontrado tente novamente =-="
+                            puts "==}--{==".center(44,'=-=')
+                        end
+                        puts ""
                     end
-                    puts ""
                 end
             end
         end
@@ -124,6 +127,6 @@ while 1 == 1
         puts "==}--{==".center(54,'=-=-')
         puts "=-= Opção não encontrada por favor tente novamente =-="
         puts "==}--{==".center(54,'=-=-')
+        puts ""
     end
-
 end
