@@ -4,14 +4,33 @@ require 'net/http'
 require 'titleize'
 
 Skins = [
-    "|    1 -=- Elderflame Frenzy",
-    "|    2 -=- Aristocrat Vandal",
-    "|    3 -=- Reaver Operator",
-    "|    4 -=- Sakura Classic" ,
-    "|    5 -=- Convex Bulldog",
-    "|    6 -=- Nebula Knife", 
-    "|    7 -=- Oni Phantom"
+    "Elderflame Frenzy",
+    "Aristocrat Vandal",
+    "Reaver Operator",
+    "Sakura Classic" ,
+    "Convex Bulldog",
+    "Nebula Knife", 
+    "Oni Phantom"
 ]
+
+valores = {
+875 => "O valor em dinheiro deve ser de R$29,90\nÉ o equivalente a 1050 Valorant Points\n",
+1275 => "O valor em dinheiro deve ser de R$44,70\n(3 vezes de R$14,90 cada um recebe-se ) É o equivalente a 1500 Valorant Points\n",
+1750 => "O valor em dinheiro deve ser de R$59,90\nÉ o equivalente a 2175 Valorant Points\n",
+1775 => "O valor em dinheiro deve ser de R$59,90\nÉ o equivalente a 2175 Valorant Points\n",
+2175 => "O valor em dinheiro deve ser de R$59,90\nÉ o equivalente a 2175 Valorant Points\n",
+2475 => "O valor em dinheiro deve ser de R$89,70\n(3 vezes de R$29,90) É o equivalente a 3150 Valorant Points\n",
+2550 => "O valor em dinheiro deve ser de R$89,70\n(3 vezes de R$29,90) É o equivalente a 3150 Valorant Points\n",
+3550 => "O valor em dinheiro deve ser de R$103,70\n(1 vez de R$59,90, 1 vez de R$29,90 e 1 vez de R$14,90) É o equivalente a 3725 Valorant Points\n",
+4350 => "O valor em dinheiro deve ser de R$119,80\n(2 vezes de R$59,90) OU (1 vez de 104,90 e 1 vez de 14,90) É o equivalente a 4350 Valorant Points\n",
+4375 => "O valor em dinheiro deve ser de R$134,80\n(1 vez de R$104,90 e 1 vez de R$29,90) É o equivalente a 4900 Valorant Points\n",
+4950 => "O valor em dinheiro deve ser de R$149,90\nÉ o equivalente a 5550 Valorant Points\n",
+5325 => "O valor em dinheiro deve ser de R$149,90\nÉ o equivalente a 5550 Valorant Points\n",
+6375 => "O valor em dinheiro deve ser de R$179,80\n(1 vez de 149,90 e 1 vez de 29,90) É o equivalente a 6600 Valorant Points\n",
+7100 => "O valor em dinheiro deve ser de R$209,80\n(1 vez de 149,90 e 1 vez de 59,90) É o equivalente a 7725 Valorant Points\n",
+8700 => "O valor em dinheiro deve ser de R$194,70\n(1 vez de R$104,90, 1 vez de R$59,90 e 1 vez de 29,90 ) É o equivalente a 8775 Valorant Points\n",
+9900 => "O valor em dinheiro deve ser de R$299,90\nÉ o equivalente a 11500 Valorant Points\n"
+}
 
 while 1 == 1
     #Inicia o programa
@@ -58,8 +77,8 @@ while 1 == 1
         puts ""
         puts "|{-=-=-=-=-=-=}]=-=[{=-=-=-=-=-=-}|"
         puts "|    Codigo     |    Nome_Skin    |"
-        puts ""
-        Skins.each {|x| puts x } #Percorre a lista de "Skins" e informa na tela o que contem dentro da lista
+        puts "|                                 |"
+        Skins.each {|x| puts "|    #{Skins.index(x)+1} -=-  #{x}"} #Percorre a lista de "Skins" e informa na tela o que contem dentro da lista
         puts "|                                 |"
         puts "|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=|"
         puts ""
@@ -70,9 +89,7 @@ while 1 == 1
         print"||Insira o código da skin desejada: "
         skin_cdg = gets.chomp.to_i
         skin_cdg = skin_cdg - 1
-        skin_name = Skins[skin_cdg]
-        skin_name_real = skin_name[11,50] #Pega a string dentro do array depois da casa 11 e antes da casa 50
-        skin_name_real = skin_name_real.titleize #Modificando para cada primeira letra da palavra ficar Maiuscula
+        skin_name = Skins[skin_cdg].titleize #Modificando para cada primeira letra da palavra ficar Maiuscula
         preco_skin = 0
         puts ""
         https = Net::HTTP.new('valorant.fandom.com', 443) #Site sobre Valorant
@@ -86,79 +103,13 @@ while 1 == 1
         doc.css('table.wikitable tr').each do |tr_backup| #Percorre todas as <table>
             if ! (tr_backup.css('img').length == 0) #Verifica se há uma <img> dentro da <table>
                 skin_site = tr_backup.css('img').first['alt']
-                if (skin_site.include? (skin_name_real)) #Verifica se o nome incluido é igual ao nome da skin pego no <alt> da <img>
+                if (skin_site.include? (skin_name)) #Verifica se o nome incluido é igual ao nome da skin pego no <alt> da <img>
                     preco_skin = tr_backup.css('td').last.css('span').text.delete(',').to_i #Pega o valor da skin em <text> e transforma em Int
-                    puts "Skin: #{skin_name_real}"
+                    puts "Skin: #{skin_name}"
                     puts "O preço: #{preco_skin} VP"
                     #Começa a comparação dos preços e declaração de custo
-                    if(preco_skin == 875)
-                        puts "---------------------------------------"
-                        puts "O valor em dinheiro deve ser de R$29,90"
-                        puts "É o equivalente a 1050 Valorant Points;"
-                        puts "--------------------------------------"
-                    elsif(preco_skin == 1275)
-                        puts "---------------------------------------"
-                        puts "O valor em dinheiro deve ser de R$44,70"
-                        puts "(3 vezes de R$14,90 cada um recebe-se )"
-                        puts "É o equivalente a 1500 Valorant Points;"
-                        puts "---------------------------------------"
-                    elsif(preco_skin >=1750 and preco_skin <=2175)
-                        puts "---------------------------------------"
-                        puts "O valor em dinheiro deve ser de R$59,90"
-                        puts "É o equivalente a 2175 Valorant Points;"
-                        puts "---------------------------------------"
-                    elsif(preco_skin >=2475 and preco_skin <=2550)
-                        puts "---------------------------------------"
-                        puts "O valor em dinheiro deve ser de R$89,70" 
-                        puts "(3 vezes de R$29,90)"
-                        puts "É o equivalente a 3150 Valorant Points;"
-                        puts "---------------------------------------"
-                    elsif(preco_skin == 3550)
-                        puts "----------------------------------------"
-                        puts "O valor em dinheiro deve ser de R$103,70"
-                        puts "(1 vez de R$59,90, 1 vez de R$29,90 e 1 vez de R$14,90)"
-                        puts "É o equivalente a 3725 Valorant Points;"
-                        puts "----------------------------------------"
-                    elsif(preco_skin == 4350)
-                        puts "----------------------------------------"
-                        puts "O valor em dinheiro deve ser de R$119,80" 
-                        puts "(2 vezes de R$59,90) OU (1 vez de 104,90 e 1 vez de 14,90)"
-                        puts "É o equivalente a 4350 Valorant Points;"
-                        puts "----------------------------------------"
-                    elsif(preco_skin == 4375)
-                        puts "----------------------------------------"
-                        puts "O valor em dinheiro deve ser de R$134,80"
-                        puts "(1 vez de R$104,90 e 1 vez de R$29,90)"
-                        puts "É o equivalente a 4900 Valorant Points;"
-                        puts "----------------------------------------"
-                    elsif(preco_skin >=4940 and preco_skin <=5325)
-                        puts "----------------------------------------"
-                        puts "O valor em dinheiro deve ser de R$149,90"
-                        puts "É o equivalente a 5550 Valorant Points;"
-                        puts "----------------------------------------"
-                    elsif(preco_skin == 6375)
-                        puts "----------------------------------------"
-                        puts "O valor em dinheiro deve ser de R$179,80"
-                        puts "(1 vez de 149,90 e 1 vez de 29,90)"
-                        puts "É o equivalente a 6600 Valorant Points;"
-                        puts "----------------------------------------"
-                    elsif(preco_skin == 7100)
-                        puts "----------------------------------------"
-                        puts "O valor em dinheiro deve ser de R$209,80"
-                        puts "(1 vez de 149,90 e 1 vez de 59,90)"
-                        puts "É o equivalente a 7725 Valorant Points;"
-                        puts "----------------------------------------"
-                    elsif(preco_skin == 8700)
-                        puts "----------------------------------------"
-                        puts "O valor em dinheiro deve ser de R$194,70"
-                        puts "(1 vez de R$104,90, 1 vez de R$59,90 e 1 vez de 29,90 )"
-                        puts "É o equivalente a 8775 Valorant Points;"
-                        puts "----------------------------------------"
-                    elsif(preco_skin == 9900)
-                        puts "----------------------------------------"
-                        puts "O valor em dinheiro deve ser de R$299,90"
-                        puts "É o equivalente a 11500 Valorant Points;"
-                        puts "----------------------------------------"
+                    if(valores.key?(preco_skin))
+                        puts valores[preco_skin]
                     else
                         puts "==}--{==".center(44,'=-=')
                         puts "=-= Valor não encontrado tente novamente =-="
